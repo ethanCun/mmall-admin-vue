@@ -33,7 +33,7 @@
         if (this.$store.state.editableTabs.length > 0) {
           this.$data.current = this.$store.state.editableTabs[0].name
           this.$router.push({
-            path: '/' + this.$data.current
+            path: this.$store.state.editableTabs[0].path
           })
         } else {
           this.$router.push({
@@ -54,7 +54,7 @@
       this.$data.current = this.$route.path
 
       if(this.$data.current === '/'){
-        this.$data.current = '/product'
+        this.$data.current = '/产品管理'
       }
     },
     watch: {
@@ -74,7 +74,7 @@
         this.$data.current = to.path
 
         if(to.path === '/'){
-          this.$data.current = '/product'
+          this.$data.current = '/产品管理'
         }
       }
     },

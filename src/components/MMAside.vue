@@ -49,7 +49,7 @@
             },
             {
               name: '产品详情图管理',
-              index: '/productDetail'
+              index: '/productDetailManager'
             }
           ]
         }
@@ -69,7 +69,6 @@
     mounted(){
 
       this.$data.activeIndex = this.$route.path
-      console.log('ss', this.$data.activeIndex)
     }
   }
 </script>

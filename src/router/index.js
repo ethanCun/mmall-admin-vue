@@ -7,14 +7,15 @@ import MMAside from '../components/MMAside.vue'
 import MMMain from '../components/MMMain.vue'
 import MMHeader from '../components/MMHeader.vue'
 import MMLogin from '../components/MMLogin.vue'
-import Detail from '../components/Detail.vue'
 
 import Product from '../components/ProductManager.vue'
 import Icon from '../components/IconManager.vue'
-import ProductDetail from '../components/ProductDetailManager.vue'
+import ProductDetailManager from '../components/ProductDetailManager.vue'
 import Model from '../components/ModelManager.vue'
 import Series from '../components/SeriesManager.vue'
 import Tab from '../components/Tab.vue'
+import AddProduct from '../components/AddProduct.vue'
+import EditProduct from '../components/EditProduct.vue'
 
 Vue.use(Router)
 
@@ -39,64 +40,71 @@ const router = new Router({
         {
           path: 'mmmain',
           name: 'mmmain',
-          component: MMMain,
-          children: [{
-              path: '/detail',
-              name: 'detail',
-              component: Detail,
-              meta: {
-                requireAuth: true
-              }
-            },
-            {
-              path: '/product',
-              name: 'product',
-              component: Product,
-              meta: {
-                requireAuth: true
-              }
-            },
-            {
-              path: '/icon',
-              name: 'icon',
-              component: Icon,
-              meta: {
-                requireAuth: true
-              }
-            },
-            {
-              path: '/productDetail',
-              name: 'productDetail',
-              component: ProductDetail,
-              meta: {
-                requireAuth: true
-              }
-            },
-            {
-              path: '/model',
-              name: 'model',
-              component: Model,
-              meta: {
-                requireAuth: true
-              }
-            },
-            {
-              path: '/series',
-              name: 'series',
-              component: Series,
-              meta: {
-                requireAuth: true
-              }
-            },
-            {
-              path: '/tab',
-              name: 'tab',
-              component: Tab,
-              meta: {
-                requireAuth: true
-              }
-            }
-          ]
+          component: MMMain
+        },
+        {
+          path: '/product',
+          name: '产品管理',
+          component: Product,
+          meta: {
+            requireAuth: true
+          }
+        },
+        {
+          path: '/icon',
+          name: '主图管理',
+          component: Icon,
+          meta: {
+            requireAuth: true
+          }
+        },
+        {
+          path: '/productDetailManager',
+          name: '详情页管理',
+          component: ProductDetailManager,
+          meta: {
+            requireAuth: true
+          }
+        },
+        {
+          path: '/model',
+          name: '规格管理',
+          component: Model,
+          meta: {
+            requireAuth: true
+          }
+        },
+        {
+          path: '/series',
+          name: '系列管理',
+          component: Series,
+          meta: {
+            requireAuth: true
+          }
+        },
+        {
+          path: '/tab',
+          name: 'tab',
+          component: Tab,
+          meta: {
+            requireAuth: true
+          }
+        },
+        {
+          path: '/addProduct',
+          name: '新增产品',
+          component: AddProduct,
+          meta: {
+            requireAuth: true
+          }
+        },
+        {
+          path: '/editProduct',
+          name: '编辑产品',
+          component: EditProduct,
+          meta:{
+            requireAuth: true
+          }
         }
       ]
     },

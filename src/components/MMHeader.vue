@@ -33,6 +33,7 @@
 
           //清除token
           this.$store.commit("setToken", null);
+          this.$store.state.editableTabs = []
 
           this.$router.push({path:'/login'})
         }
