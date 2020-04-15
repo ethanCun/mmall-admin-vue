@@ -12,7 +12,7 @@
     data() {
 
       return {
-        current: '/product', //默认显示产品
+        current: '',
         editTabs: [
 
         ]
@@ -50,12 +50,10 @@
       }
     },
     mounted() {
-      if (this.$store.state.editableTabs.length > 0) {
-        this.$data.current = this.$store.state.editableTabs[0].name
-        console.log('mounted:', this.$data.current)
-      }
 
-      if(to.path === '/'){
+      this.$data.current = this.$route.path
+
+      if(this.$data.current === '/'){
         this.$data.current = '/product'
       }
     },
@@ -72,6 +70,7 @@
           name: to.name,
           path: to.path
         })
+
         this.$data.current = to.path
 
         if(to.path === '/'){

@@ -26,7 +26,7 @@
     name: 'mmaside',
     data(){
       return{
-        activeIndex: '/product',
+        activeIndex: '',
         item:{
           name: '库存管理',
           index: '/',
@@ -57,12 +57,19 @@
     },
     watch:{
       $route(to, from){
+
+        console.log(to.path)
         this.$data.activeIndex = to.path
 
         if(to.path === '/'){
           this.$data.activeIndex = '/product'
         }
       }
+    },
+    mounted(){
+
+      this.$data.activeIndex = this.$route.path
+      console.log('ss', this.$data.activeIndex)
     }
   }
 </script>
