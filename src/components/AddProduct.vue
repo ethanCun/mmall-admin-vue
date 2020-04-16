@@ -78,25 +78,11 @@
       //完成上传主图
       uploadIconSuccess: function(res, file, fileList){
 
-         console.log('完成上传主图fileList:', JSON.stringify(fileList))
+         console.log('完成上传主图res:', JSON.stringify(res))
 
-         this.$data.form.iconUrls = [];
-
-         for (let i=0; i<fileList.length; i++){
-
-           for(let j=0; j<fileList[i].response.data.length; j++){
-
-              let dataUrl = fileList[i].response.data[j];
-
-              if (this.$data.form.iconUrls.indexOf(dataUrl) != -1){
-                continue;
-              }
-
-              this.$data.form.iconUrls.push(dataUrl)
-           }
-         }
-
-         console.log('完成上传主图form:', JSON.stringify(this.$data.form))
+          if(this.$data.form.iconUrls.indexOf(res.data[0]) == -1){
+            this.$data.form.iconUrls.push(res.data[0])
+          }
 
       },
 
@@ -123,24 +109,9 @@
 
          console.log('完成上传详情图fileList:', JSON.stringify(fileList))
 
-         this.$data.form.detailUrls = [];
-
-         for (let i=0; i<fileList.length; i++){
-
-           for(let j=0; j<fileList[i].response.data.length; j++){
-
-              let dataUrl = fileList[i].response.data[j];
-
-              if (this.$data.form.detailUrls.indexOf(dataUrl) != -1){
-                continue;
-              }
-
-              this.$data.form.detailUrls.push(dataUrl)
-           }
-         }
-
-         console.log('完成上传详情图form:', JSON.stringify(this.$data.form))
-
+          if(this.$data.form.detailUrls.indexOf(res.data[0]) == -1){
+            this.$data.form.detailUrls.push(res.data[0])
+          }
       },
 
       //移除详情图
@@ -173,6 +144,8 @@
            // ':' + date.getSeconds()
 
           that.$data.form.createTime = new Date()
+
+          console.log('新增产品提交信息: ', JSON.stringify(that.$data.form))
 
           that.$axios({
             method: 'post',

@@ -16,6 +16,9 @@ let productListUrl = baseApi + "product/list"
 //分页获取所有的产品
 let productListPageUrl = baseApi + "product/listByPage"
 
+//查询
+let searchProductUrl = baseApi + 'product/search'
+
 //产品详情
 let productDetailUrl = baseApi + 'product/productWithId'
 
@@ -25,6 +28,11 @@ let addProductUrl = baseApi + 'product/add'
 //删除产品
 let deleteProductUrl = baseApi + 'product/delete'
 
+//批量删除
+let deleteProductWithIdsUrl = baseApi + 'product/deleteWithIds'
+
+//更新产品
+let updateProductUrl = baseApi + 'product/update'
 
 export default {
 
@@ -33,8 +41,11 @@ export default {
   getVerifyCodeUrl:getVerifyCodeUrl,
   loginUrl:loginUrl,
   productListUrl:productListUrl,
-  productListPageUrl:productListPageUrl,
+  productListPageUrl: productListPageUrl,
   addProductUrl: addProductUrl,
   deleteProductUrl: deleteProductUrl,
-  productDetailUrl: productDetailUrl
+  productDetailUrl: productDetailUrl,
+  updateProductUrl: updateProductUrl,
+  searchProductUrl: searchProductUrl,
+  deleteProductWithIdsUrl: deleteProductWithIdsUrl
 }

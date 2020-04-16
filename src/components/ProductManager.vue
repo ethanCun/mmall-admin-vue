@@ -3,13 +3,14 @@
     <div class="wrap" v-loading.fullscreen.lock="loading">
 
       <div class="top">
-        <el-button type="danger" class="deleteAll">删除所选</el-button>
+        <el-button type="danger" class="deleteAll" @click="deleteProductWithIds">删除所选</el-button>
         <el-button type="success" class="addProduct" @click="addProduct">新增产品</el-button>
-        <el-input v-model="searchText" placeholder="请输入产品信息" class="searchText"></el-input>
-        <el-button class="searchBtn" type="primary" icon="el-icon-search" circle="" @click="productDetail(scope.$index, data)"></el-button>
+        <el-input v-model="searchText" placeholder="请输入产品名称/系列/规格" class="searchText"></el-input>
+        <el-button class="searchBtn" type="primary" icon="el-icon-search" circle="" @click="search"></el-button>
       </div>
 
-      <el-table :data="data" border="" height="500px" style="width: 100%; text-align: center;">
+      <el-table :data="data" border="" height="400px" style="width: 100%; text-align: center;"
+       @select="select" @select-all="selectAll">
         <el-table-column type="selection" width="60px"></el-table-column>
         <el-table-column prop="name" align="center" label="名称"></el-table-column>
         <el-table-column prop="marketPrice" align="center" label="市场价格"></el-table-column>
@@ -25,14 +26,18 @@
         </el-table-column>
       </el-table>
 
+      <!-- 分页 -->
+      <el-pagination style="margin-top: 20px;" background="" layout="prev,pager,next" :total="total"
+      :page-size="pageSize" :current-page="pageNum" @current-change="pageChange"></el-pagination>
+
       <!-- 新增产品 -->
-      <el-dialog title="新增产品" :visible.sync="addProductVisiable">
+      <el-dialog title="新增产品" :visible.sync="addProductVisiable" v-if="addProductVisiable">
           <AddProduct @productList="productList"></AddProduct>
       </el-dialog>
 
       <!-- 编辑产品 -->
       <el-dialog title="编辑产品" :visible.sync="editProductVisiable" v-if="editProductVisiable">
-        <EditProduct ref="editProduct" :id="editProductId"></EditProduct>
+        <EditProduct ref="editProduct" :id="editProductId" @productList="productList"></EditProduct>
       </el-dialog>
     </div>
   </div>
@@ -54,6 +59,10 @@
         addProductVisiable: false, //显示新增产品
         editProductVisiable: false, //显示编辑产品
         editProductId:0, //编辑产品的id
+        selectProductIds: [], //选择的需要删除的产品
+        pageNum: 1,
+        pageSize: 5,
+        total: 0,
         data:null
       }
     },
@@ -71,8 +80,11 @@
         that.$data.addProductVisiable = false;
         that.$data.editProductVisiable = false;
 
-        this.$axios({
-          url: this.$api.productListUrl,
+        that.$data.loading = true
+
+        that.$axios({
+          url: that.$api.productListPageUrl+'?pageNum=' + that.$data.pageNum + '&pageSize='
+          + that.$data.pageSize,
           method: 'get',
           responseType: 'json',
           data: {}
@@ -80,6 +92,7 @@
 
             if (response.data.code == 0){
               that.$data.data = response.data.data;
+              that.$data.total = response.data.total;
             }
 
         }).catch(function(error){
@@ -145,8 +158,139 @@
 
             console.log('取消删除产品')
           })
+      },
+
+      //批量删除
+      deleteProductWithIds: function(){
+
+        var that = this;
+        var ids = ''
+
+        that.$confirm('是否删除选中的产品?', '', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(function(){
+
+          if(that.$data.selectProductIds.length > 0){
+            ids = that.$data.selectProductIds.join(',')
+          }
+          console.log('ids:', ids)
+
+          that.$data.loading = true;
+
+          that.$axios({
+            url: that.$api.deleteProductWithIdsUrl+'?ids=' + ids,
+            method: 'post',
+            data: {},
+            responseType: 'json'
+          }).then(function(response){
+
+            if (response.data.code === 0){
+
+              that.$message({
+                message: '删除成功',
+                type: 'success'
+              })
+
+              that.productList()
+            }else{
+
+              that.$message({
+                message: response.data.msg,
+                type: 'danger'
+              })
+            }
+          }).catch(function(){
+
+          }).then(function(){
+
+            that.$data.loading = false;
+          })
+
+        }).catch(function(){
+
+        })
 
 
+      },
+
+
+      //查询
+      search: function(){
+
+        var that = this;
+
+        that.$data.loading = true;
+
+        that.$axios({
+          url: that.$api.searchProductUrl + '?searchText=' + that.$data.searchText +
+          '&pageNum=' + that.$data.pageNum + '&pageSize=' + that.$data.pageSize,
+          method: 'get',
+          data: {},
+          responseType: 'json'
+        }).then(function(response){
+
+          if (response.data.code === 0){
+
+            that.$message({
+              message: '查找成功',
+              type: 'success'
+            })
+
+            that.$data.data = response.data.data;
+            that.$data.total = response.data.total
+
+          }else{
+
+            that.$message({
+              message: response.data.msg,
+              type: 'danger'
+            })
+          }
+        }).catch(function(){
+
+        }).then(function(){
+
+          that.$data.loading = false;
+        })
+      },
+
+      //选择
+      select: function(selection, row){
+
+        console.log(JSON.stringify(selection))
+
+        this.$data.selectProductIds = [];
+
+        for(let i=0; i<selection.length; i++){
+
+          if(this.$data.selectProductIds.indexOf(selection[i].id) == -1){
+            this.$data.selectProductIds.push(parseInt(selection[i].id))
+          }
+        }
+
+      },
+
+      //全选
+      selectAll: function(selection){
+
+        this.$data.selectProductIds = [];
+
+        for(let i=0; i<selection.length; i++){
+
+          if(this.$data.selectProductIds.indexOf(selection[i].id) == -1){
+            this.$data.selectProductIds.push(parseInt(selection[i].id))
+          }
+        }
+      },
+
+      //选择页码
+      pageChange: function(pageNum){
+
+        this.$data.pageNum = pageNum
+
+        this.productList()
       }
     },
     mounted() {
