@@ -239,7 +239,8 @@
             })
 
             that.$data.data = response.data.data;
-            that.$data.total = response.data.total
+            that.$data.total = response.data.total;
+            that.$data.pageNum = 1;
 
           }else{
 
